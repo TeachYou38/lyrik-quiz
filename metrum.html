@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metrum-Check</title>
+<style>
+/* Layout: eine schmale Spalte fürs Handy – Kopf mit Fortschrittsleiste, darunter eine Fragekarte */
+:root{
+  --bg:#f4f5f3; --surface:#ffffff; --ink:#1c2321; --muted:#5d6763; --line:#d9dedb;
+  --accent:#2455a3; --accent-soft:#e3eaf6; --on-accent:#ffffff;
+  --ok:#1f7a3f; --ok-soft:#e2f2e6; --bad:#b3321f; --bad-soft:#f8e3df;
+  --f-ui:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-verse:"Literata", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121514; --surface:#1b201e; --ink:#e8ecea; --muted:#a2aca8; --line:#323a37;
+  --accent:#8fb3f0; --accent-soft:#18243a; --on-accent:#0f1312;
+  --ok:#6fd08f; --ok-soft:#173222; --bad:#f08a78; --bad-soft:#3a1c17; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121514; --surface:#1b201e; --ink:#e8ecea; --muted:#a2aca8; --line:#323a37;
+  --accent:#8fb3f0; --accent-soft:#18243a; --on-accent:#0f1312;
+  --ok:#6fd08f; --ok-soft:#173222; --bad:#f08a78; --bad-soft:#3a1c17; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:17px/1.5 var(--f-ui);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:620px;margin:0 auto;display:grid;gap:18px}
+header{display:grid;gap:10px}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font:700 1.7rem/1.15 var(--f-verse);margin:0;text-wrap:balance}
+.intro{margin:0;color:var(--muted);font-size:15px}
+.bar{display:flex;gap:3px}
+.bar span{flex:1;height:7px;border-radius:2px;background:var(--line)}
+.bar span.cur{background:var(--accent)}
+.bar span.ok{background:var(--ok)} .bar span.bad{background:var(--bad)}
+.meta{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:grid;gap:16px}
+.tag{justify-self:start;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--accent-soft);color:var(--accent)}
+.prompt{font-size:1.15rem;font-weight:700;margin:0;text-wrap:pretty}
+blockquote{margin:0;padding:12px 14px;border-left:3px solid var(--accent);background:var(--accent-soft);border-radius:0 6px 6px 0}
+blockquote p{margin:0;font:italic 400 1.12rem/1.55 var(--f-verse)}
+blockquote cite{display:block;margin-top:6px;font:normal 13px var(--f-ui);color:var(--muted)}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:var(--ink);
+  background:var(--surface);border:1.5px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;min-height:52px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.opt .k{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;background:var(--bg);color:var(--muted)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)} .opt.right .k{background:var(--ok);color:var(--surface)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)} .opt.wrong .k{background:var(--bad);color:var(--surface)}
+.opt.dim{opacity:.55}
+.fb{border-radius:8px;padding:12px 14px;font-size:16px}
+.fb.ok{background:var(--ok-soft)} .fb.bad{background:var(--bad-soft)}
+.fb b{display:block;margin-bottom:2px}
+.fb.ok b{color:var(--ok)} .fb.bad b{color:var(--bad)}
+.btn{font:700 17px var(--f-ui);border:0;border-radius:8px;padding:13px 18px;cursor:pointer;background:var(--accent);color:var(--on-accent);width:100%}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.score{font:700 3.2rem/1 var(--f-verse);font-variant-numeric:tabular-nums;margin:0}
+.score small{font-size:1.3rem;color:var(--muted)}
+.miss{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.miss li{border-top:1px solid var(--line);padding-top:10px;font-size:15px}
+.miss li .q{color:var(--muted)} .miss li .a{font-weight:700;color:var(--ok)}
+.btns{display:grid;gap:10px}
+@media (prefers-reduced-motion:no-preference){.card{animation:in .18s ease-out}@keyframes in{from{transform:translateY(6px);opacity:.6}}}
+</style>
+</head>
+<body style="margin:0">
+
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Quiz 2 · Metrum</div>
+    <h1>Metrum-Check</h1>
+    <p class="intro">8 Fragen, jedes Versmaß kommt zweimal vor. Lesen Sie halblaut und klopfen Sie die Betonung mit. Ca. 5 Minuten.</p>
+    <div class="bar" id="bar"></div>
+    <div class="meta"><span id="pos"></span><span id="pts"></span></div>
+  </header>
+  <main id="stage"></main>
+</div>
+
+<script>
+const QUIZ = {"questions": [{"tag": "", "prompt": "Welches Metrum hat dieser Vers?", "verse": ["Sein Blick ist vom Vorübergehn der Stäbe"], "src": "Rilke, „Der Panther“, V. 1", "options": ["Jambus", "Trochäus", "Daktylus", "Anapäst"], "expl": "sein BLICK ist VOM vo-RÜ-ber-GEHN der STÄ-be → xX xX xX xX xX x: fünfhebiger Jambus."}, {"tag": "", "prompt": "Welches Metrum hat dieser Vers?", "verse": ["Frühling läßt sein blaues Band"], "src": "Mörike, „Er ist’s“, V. 1", "options": ["Trochäus", "Jambus", "Daktylus", "Anapäst"], "expl": "FRÜH-ling LÄSST sein BLAU-es BAND → Xx Xx Xx X: vierhebiger Trochäus."}, {"tag": "", "prompt": "Welchem Versfuß entspricht das Wort „Königin“?", "verse": ["Königin"], "src": "Beispielwort aus H1", "options": ["Daktylus", "Anapäst", "Trochäus", "Jambus"], "expl": "KÖ-ni-gin → Xxx: eine betonte, zwei unbetonte Silben. Das ist ein Daktylus."}, {"tag": "", "prompt": "Welchem Versfuß entspricht das Wort „Paradies“?", "verse": ["Paradies"], "src": "Beispielwort aus H1", "options": ["Anapäst", "Daktylus", "Jambus", "Trochäus"], "expl": "pa-ra-DIES → xxX: zwei unbetonte, dann eine betonte Silbe. Das ist ein Anapäst."}, {"tag": "", "prompt": "Welches Metrum hat dieser Vers?", "verse": ["Der schnelle Tag ist hin, die Nacht schwingt ihre Fahn"], "src": "Gryphius, „Abend“, V. 1 (M1)", "options": ["Jambus", "Trochäus", "Daktylus", "Anapäst"], "expl": "der SCHNEL-le TAG ist HIN, | die NACHT schwingt IH-re FAHN → sechshebiger Jambus mit Zäsur, also ein Alexandriner."}, {"tag": "", "prompt": "Welches Metrum hat dieser Vers?", "verse": ["Wieder flattern durch die Lüfte"], "src": "Mörike, „Er ist’s“, V. 2", "options": ["Trochäus", "Jambus", "Anapäst", "Daktylus"], "expl": "WIE-der FLAT-tern DURCH die LÜF-te → Xx Xx Xx Xx: vierhebiger Trochäus."}, {"tag": "", "prompt": "Welchem Versfuß entspricht das Wort „fröhliche“?", "verse": ["fröhliche"], "src": "Beispielwort", "options": ["Daktylus", "Trochäus", "Anapäst", "Jambus"], "expl": "FRÖH-li-che → Xxx: Das ist ein Daktylus, wie „Königin“ oder „Wanderer“."}, {"tag": "", "prompt": "Welchem Versfuß entspricht das Wort „Melodie“?", "verse": ["Melodie"], "src": "Beispielwort", "options": ["Anapäst", "Daktylus", "Jambus", "Trochäus"], "expl": "me-lo-DIE → xxX: Das ist ein Anapäst, wie „Paradies“ oder „Elefant“."}]};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+let order, idx, results;   // results[i] = true/false/undefined (index in QUIZ.questions)
+function start(list){
+  order = list; idx = 0; results = {};
+  render();
+}
+function tagOf(q){ if(q.tag) return q.tag; if(!q.verse) return 'Begriff'; return q.verse[0].includes(' ') ? 'Vers' : 'Wort'; }
+
+function drawBar(){
+  $('#bar').innerHTML = order.map((qi,i)=>{
+    const r = results[qi]; const c = r===true?'ok':r===false?'bad':(i===idx?'cur':'');
+    return `<span class="${c}"></span>`}).join('');
+  const right = order.filter(qi=>results[qi]===true).length;
+  $('#pos').textContent = idx < order.length ? `Frage ${idx+1} von ${order.length}` : 'Fertig';
+  $('#pts').textContent = `${right} richtig`;
+}
+
+function render(){
+  drawBar();
+  if(idx >= order.length) return finish();
+  const qi = order[idx], q = QUIZ.questions[qi];
+  const opts = shuffle(q.options.map((t,i)=>({t, ok:i===0})));
+  const verse = q.verse ? `<blockquote>${q.verse.map(v=>`<p>${esc(v)}</p>`).join('')}${q.src?`<cite>${esc(q.src)}</cite>`:''}</blockquote>` : '';
+  $('#stage').innerHTML = `<section class="card" aria-live="polite">
+    <span class="tag">${esc(tagOf(q))}</span>
+    <p class="prompt">${esc(q.prompt)}</p>${verse}
+    <div class="opts">${opts.map((o,i)=>`<button class="opt" id="opt${i}" data-ok="${o.ok}"><span class="k">${'ABCD'[i]}</span><span>${esc(o.t)}</span></button>`).join('')}</div>
+    <div id="after"></div></section>`;
+  document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>answer(b,q,qi)));
+}
+
+function answer(btn,q,qi){
+  const ok = btn.dataset.ok === 'true';
+  results[qi] = ok;
+  document.querySelectorAll('.opt').forEach(b=>{
+    b.disabled = true;
+    if(b.dataset.ok==='true') b.classList.add('right');
+    else if(b===btn) b.classList.add('wrong');
+    else b.classList.add('dim');
+  });
+  const last = idx === order.length-1;
+  $('#after').innerHTML = `<div class="fb ${ok?'ok':'bad'}"><b>${ok?'Richtig.':'Leider falsch. Richtig ist: '+esc(q.options[0])}</b>${esc(q.expl)}</div>
+    <button class="btn" id="next" style="margin-top:14px">${last?'Ergebnis anzeigen':'Weiter'}</button>`;
+  drawBar();
+  const n = $('#next'); n.addEventListener('click',()=>{idx++;render();window.scrollTo({top:0})}); n.focus({preventScroll:true});
+}
+
+function finish(){
+  const right = order.filter(qi=>results[qi]===true).length;
+  const wrong = order.filter(qi=>results[qi]!==true);
+  const pct = right/order.length;
+  const msg = pct===1 ? 'Alles richtig. Sie sind gut vorbereitet.' : pct>=.75 ? 'Sicher. Schauen Sie sich die Fehler unten noch einmal an.' : pct>=.5 ? 'Solide Grundlage. Wiederholen Sie die falschen Fragen und lesen Sie die passende Hilfe (H1/H2) nach.' : 'Hier lohnt sich Üben: Lesen Sie H1/H2 und wiederholen Sie die falschen Fragen.';
+  $('#stage').innerHTML = `<section class="card">
+    <span class="tag">Ergebnis</span>
+    <p class="score">${right}<small> / ${order.length}</small></p>
+    <p style="margin:0">${msg}</p>
+    ${wrong.length?`<ul class="miss">${wrong.map(qi=>{const q=QUIZ.questions[qi];return `<li><div class="q">${esc(q.prompt)}${q.verse?' – „'+esc(q.verse.join(' / '))+'“':''}</div><div class="a">${esc(q.options[0])}</div></li>`}).join('')}</ul>`:''}
+    <div class="btns">${wrong.length?`<button class="btn" id="redo">Nur die ${wrong.length} falschen wiederholen</button>`:''}
+    <button class="btn ghost" id="again">Ganzes Quiz neu starten</button></div></section>`;
+  if(wrong.length) $('#redo').addEventListener('click',()=>start(wrong));
+  $('#again').addEventListener('click',()=>start(QUIZ.questions.map((_,i)=>i)));
+}
+start(QUIZ.questions.map((_,i)=>i));
+</script>
+
+</body>
+</html>

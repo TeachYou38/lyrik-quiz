@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hilfen zu „Die Welt“</title>
+<style>
+/* Layout: eine Spalte – Deutung wählen, Gedicht mit Markierungen, gestufte Hilfekarten, ein Hilfe-Button */
+:root{
+  --bg:#f5f4f1; --surface:#ffffff; --ink:#1f2123; --muted:#62666a; --line:#dcdbd6;
+  --accent:#8a5a12; --accent-soft:#f4ead9; --on-accent:#ffffff;
+  --m1:#f6d77a; --m2:#a9d3f2; --m3:#b5e3b0; --m4:#f5b8cf;
+  --f-ui:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-verse:"Literata", Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141413; --surface:#1d1d1b; --ink:#ecebe7; --muted:#a6a59f; --line:#34332f;
+  --accent:#e7b765; --accent-soft:#3a2d17; --on-accent:#181410;
+  --m1:#6a5413; --m2:#1f4a6b; --m3:#2c5a2a; --m4:#6b2a42; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141413; --surface:#1d1d1b; --ink:#ecebe7; --muted:#a6a59f; --line:#34332f;
+  --accent:#e7b765; --accent-soft:#3a2d17; --on-accent:#181410;
+  --m1:#6a5413; --m2:#1f4a6b; --m3:#2c5a2a; --m4:#6b2a42; color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:17px/1.5 var(--f-ui);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+.wrap{max-width:640px;margin:0 auto;display:grid;gap:20px}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font:700 1.65rem/1.15 var(--f-verse);margin:4px 0 6px;text-wrap:balance}
+.lead{margin:0;color:var(--muted);font-size:15px}
+h2{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.choices{display:grid;gap:8px}
+.choice{display:flex;gap:12px;align-items:flex-start;text-align:left;font:inherit;font-size:15px;color:var(--ink);background:var(--surface);
+  border:1.5px solid var(--line);border-radius:8px;padding:11px 13px;cursor:pointer}
+.choice b{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--bg);font-size:15px}
+.choice[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.choice[aria-pressed="true"] b{background:var(--accent);color:var(--on-accent)}
+.choice:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.poem{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 14px 14px 8px}
+.poem h3{font:700 1.05rem var(--f-verse);margin:0 0 10px 34px}
+.poem h3 span{font-weight:400;color:var(--muted);font-size:.9rem}
+.l{display:grid;grid-template-columns:30px 1fr;gap:4px;font:400 .95rem/1.6 var(--f-verse)}
+.l > span:last-child{padding-left:1em;text-indent:-1em;min-width:0}
+.l .n{font:12px/1.6rem var(--f-ui);color:var(--muted);text-align:right;padding-right:6px;font-variant-numeric:tabular-nums}
+.gap{height:10px}
+mark{background:transparent;color:inherit;border-radius:3px;padding:0 1px;transition:background .2s}
+mark.on1{background:var(--m1)} mark.on2{background:var(--m2)} mark.on3{background:var(--m3)} mark.on4{background:var(--m4)}
+.notes{font-size:13px;color:var(--muted);margin:10px 0 0 34px}
+.panel{display:grid;gap:12px}
+.status{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--muted)}
+.dots{display:flex;gap:5px}.dots i{width:22px;height:6px;border-radius:2px;background:var(--line)}.dots i.on{background:var(--accent)}
+.btn{font:700 17px var(--f-ui);border:0;border-radius:8px;padding:14px 18px;cursor:pointer;background:var(--accent);color:var(--on-accent);width:100%}
+.btn:disabled{opacity:.45;cursor:default}
+.sm{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:8px}
+.sm .hd{display:flex;gap:10px;align-items:center;font-weight:700}
+.sw{flex:none;width:16px;height:16px;border-radius:3px}
+.sw1{background:var(--m1)} .sw2{background:var(--m2)} .sw3{background:var(--m3)} .sw4{background:var(--m4)}
+.sm p{margin:0;font-size:16px}
+.sm .name{font-size:1.1rem}
+.sm .muster{font:italic 400 1rem/1.55 var(--f-verse);border-left:3px solid var(--accent);padding-left:10px}
+.hint{font-size:14px;color:var(--muted);margin:0}
+</style>
+</head>
+<body style="margin:0">
+
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Deutungsaufgabe · gestufte Hilfen</div>
+    <h1>Hilfen zu „Die Welt“</h1>
+    <p class="lead">Wählen Sie die Deutung, die Sie auf dem Arbeitsblatt angekreuzt haben. Holen Sie sich dann nur so viel Hilfe, wie Sie brauchen, und kreuzen Sie die genutzte Stufe auf dem Arbeitsblatt an.</p>
+  </header>
+
+  <section>
+    <h2>1 · Ihre Deutung</h2>
+    <div class="choices" id="choices"></div>
+  </section>
+
+  <section class="poem" aria-label="Gedicht M1">
+    <h3>Christian Hofmann von Hofmannswaldau: Die Welt <span>(1679)</span></h3>
+    <div id="poem"></div>
+    <p class="notes">Text in modernisierter Schreibung.</p>
+  </section>
+
+  <section class="panel">
+    <h2>2 · Hilfe holen</h2>
+    <div class="status"><span id="lvl">Noch keine Hilfe genutzt</span><span class="dots" id="dots"><i></i><i></i><i></i></span></div>
+    <button class="btn" id="more" disabled>Ich brauche ein wenig Hilfe</button>
+    <p class="hint" id="hint">Wählen Sie zuerst oben eine Deutung.</p>
+    <div id="cards" class="panel"></div>
+  </section>
+</div>
+
+<script>
+const POEM = [
+ "Was ist die Welt und ihr berühmtes Glänzen?",
+ "Was ist die Welt und ihre ganze Pracht?",
+ "Ein schnöder Schein in kurzgefassten Grenzen,",
+ "Ein schneller Blitz bei schwarzgewölkter Nacht,",
+ "Ein buntes Feld, da Kummerdisteln grünen,",
+ "Ein schön Spital, so voller Krankheit steckt,",
+ "Ein Sklavenhaus, da alle Menschen dienen,",
+ "Ein faules Grab, so Alabaster deckt.",
+ "Das ist der Grund, darauf wir Menschen bauen",
+ "Und was das Fleisch für einen Abgott hält.",
+ "Komm, Seele, komm und lerne weiter schauen,",
+ "Als sich erstreckt der Zirkel dieser Welt!",
+ "Streich ab von dir derselben kurzes Prangen,",
+ "Halt ihre Lust für eine schwere Last:",
+ "So wirst du leicht in diesen Port gelangen,",
+ "Da Ewigkeit und Schönheit sich umfasst."
+];
+// Markierungen: [Vers (1-basiert), Textstelle]
+const D = {
+ A: { label: "Das Gedicht entlarvt die Pracht der Welt als bloßen Schein, hinter dem Vergänglichkeit, Leid und Tod stehen.",
+   sm: [
+    { marks: [[6,"schön Spital, so voller Krankheit steckt"],[8,"faules Grab, so Alabaster deckt"]], where: "V. 6 und V. 8",
+      name: "Antithese", extra: "Schöne Außenseite und krankes, verfallenes Inneres stehen gegeneinander: „schön“ – „Krankheit“, „Alabaster“ – „faul“.",
+      muster: "Die Antithese „Ein schön Spital, so voller Krankheit steckt“ (V. 6) stellt die schöne Außenseite der Welt ihrem kranken Inneren gegenüber. Dadurch wird deutlich, dass die Pracht der Welt nur eine Fassade ist, hinter der Leid und Tod stehen. Dies stützt die Deutung, dass das Gedicht den schönen Schein der Welt entlarvt." },
+    { marks: [[4,"schneller Blitz bei schwarzgewölkter Nacht"]], where: "V. 4",
+      name: "Metapher", extra: "Der Glanz der Welt wird ohne Vergleichswort zum Blitz in dunkler Nacht.",
+      muster: "Mit der Metapher „Ein schneller Blitz bei schwarzgewölkter Nacht“ (V. 4) wird der Glanz der Welt als kurzes Aufleuchten in völliger Dunkelheit dargestellt. Hierdurch wird betont, dass das Schöne nur einen Augenblick dauert. Damit wird deutlich, dass die Pracht der Welt trügerisch und vergänglich ist." },
+    { marks: [[3,"schnöder Schein"]], where: "V. 3",
+      name: "Alliteration", extra: "„schnöder Schein“: gleicher Anlaut „sch“. Der Klang hebt das Schlüsselwort „Schein“ hervor.",
+      muster: "Die Alliteration „schnöder Schein“ (V. 3) hebt durch den gleichen Anlaut das Wort „Schein“ hervor. Auf diese Weise rückt in den Mittelpunkt, dass die Welt nur scheinbar wertvoll ist. Dies stützt die Deutung, dass das Gedicht die Pracht der Welt als bloßen Schein entlarvt." },
+    { marks: [[3,"Ein"],[4,"Ein"],[5,"Ein"],[6,"Ein"],[7,"Ein"],[8,"Ein"]], where: "V. 3–8",
+      name: "Anapher", extra: "Sechs Verse hintereinander beginnen mit „Ein …“. Jeder Vers liefert ein neues Bild für die Welt.",
+      muster: "Die Anapher „Ein …“ (V. 3–8) reiht sechs Bilder für die Welt aneinander. Hierdurch wird eindringlich gezeigt, dass jede neue Antwort auf die Frage „Was ist die Welt?“ (V. 1) nur wieder Schein und Verfall enthüllt. Folglich wird der Glanz der Welt Schritt für Schritt entlarvt." }
+   ]},
+ B: { label: "Das Gedicht ist vor allem ein Appell: Die Seele soll sich vom Irdischen abwenden und ihr Ziel in Gott und der Ewigkeit suchen.",
+   sm: [
+    { marks: [[11,"Komm, Seele, komm"]], where: "V. 11",
+      name: "Wiederholung", extra: "Das Wort „komm“ wird wiederholt. Es ist ein Imperativ, also eine Aufforderung an die Seele.",
+      muster: "Durch die Wiederholung „Komm, Seele, komm“ (V. 11) wird die Aufforderung an die Seele eindringlich und drängend. Hierdurch wird betont, dass das Gedicht nicht nur klagt, sondern zur Umkehr aufruft. Dies stützt die Deutung, dass das Gedicht vor allem ein Appell ist." },
+    { marks: [[15,"in diesen Port gelangen"]], where: "V. 15",
+      name: "Metapher", extra: "„Port“ heißt Hafen: Das Leben wird zur Seefahrt, das Ziel (Gott, Ewigkeit) zum sicheren Hafen.",
+      muster: "Die Metapher „in diesen Port gelangen“ (V. 15) stellt das Leben als Seefahrt dar, deren sicheres Ziel der Hafen ist. Auf diese Weise wird das Jenseits als Ort der Ruhe veranschaulicht. Damit wird deutlich, dass das Gedicht der Seele ein erreichbares Ziel zeigt, wenn sie sich von der Welt löst." },
+    { marks: [[14,"Lust für eine schwere Last"]], where: "V. 14",
+      name: "Antithese", extra: "„Lust“ und „Last“ stehen gegeneinander: Was Freude verspricht, soll als Belastung gesehen werden. Die Wörter klingen fast gleich.",
+      muster: "Die Antithese „Halt ihre Lust für eine schwere Last“ (V. 14) stellt Vergnügen und Belastung gegenüber. Durch den ähnlichen Klang von „Lust“ und „Last“ prägt sich die Aufforderung ein. Dies stützt die Deutung, dass das Gedicht die Seele dazu bewegen will, die Freuden der Welt neu zu bewerten und abzulegen." },
+    { marks: [[16,"Ewigkeit und Schönheit sich umfasst"]], where: "V. 16",
+      name: "Personifikation", extra: "„Ewigkeit“ und „Schönheit“ umarmen sich wie Menschen.",
+      muster: "Die Personifikation „Da Ewigkeit und Schönheit sich umfasst“ (V. 16) zeigt Ewigkeit und Schönheit wie zwei Menschen, die sich umarmen. Dadurch wird das Ziel anschaulich und verlockend gemacht. Damit wird deutlich, dass der Appell mit einem Versprechen endet: Wahre Schönheit gibt es nur im Ewigen." }
+   ]},
+ C: { label: "Das Gedicht kritisiert vor allem die Menschen: Sie bauen ihr Leben auf das Vergängliche und verehren die Welt wie einen Gott.",
+   sm: [
+    { marks: [[10,"was das Fleisch für einen Abgott hält"]], where: "V. 10",
+      name: "Metapher", extra: "Die Welt wird zum „Abgott“, also zu einem falschen Gott. „Das Fleisch“ steht für den Menschen, der nur seinen Sinnen folgt.",
+      muster: "Mit der Metapher „Abgott“ (V. 10) wird die Welt als falscher Gott bezeichnet, den „das Fleisch“, also der sinnliche Mensch, verehrt. Dadurch wird hervorgehoben, dass die Menschen das Vergängliche an die Stelle Gottes setzen. Dies stützt die Deutung, dass das Gedicht das Verhalten der Menschen kritisiert." },
+    { marks: [[7,"Sklavenhaus"],[7,"dienen"]], where: "V. 7",
+      name: "Metapher", extra: "Die Welt wird zum „Sklavenhaus“: Die Menschen sind nicht frei, sondern „dienen“ ihr.",
+      muster: "Die Metapher „Ein Sklavenhaus, da alle Menschen dienen“ (V. 7) zeigt die Menschen als Sklaven der Welt. Auf diese Weise wird verdeutlicht, dass sie sich vom Irdischen abhängig machen. Damit wird deutlich, dass das Gedicht den Menschen ihre Unfreiheit vor Augen führt." },
+    { marks: [[9,"der Grund, darauf wir"],[9,"bauen"]], where: "V. 9",
+      name: "Metapher", extra: "Das Leben wird zum Haus: Die Menschen „bauen“ es auf einen „Grund“ (Fundament), nämlich auf die vergängliche Welt.",
+      muster: "Die Metapher „Das ist der Grund, darauf wir Menschen bauen“ (V. 9) stellt das Leben als Bauwerk dar, dessen Fundament die vergängliche Welt ist. Hierdurch wird veranschaulicht, wie unsicher dieses Fundament ist. Dies stützt die Deutung, dass das Gedicht die Menschen für ihre falsche Lebensgrundlage kritisiert." },
+    { marks: [[7,"Menschen"],[9,"Menschen"]], where: "V. 7 und V. 9",
+      name: "Wiederholung", extra: "Das Wort „Menschen“ kehrt wieder. In V. 9 schließt das „wir“ das lyrische Ich mit ein.",
+      muster: "Durch die Wiederholung des Wortes „Menschen“ (V. 7, V. 9) rückt das Gedicht die Menschen in den Mittelpunkt. Dadurch wird deutlich, dass nicht nur die Welt, sondern vor allem das Verhalten der Menschen das Problem ist. Dies stützt die Deutung, dass das Gedicht Kritik am Menschen übt." }
+   ]}
+};
+const LEVEL_TXT = ["Noch keine Hilfe genutzt","Hilfestufe 1 von 3: Textstellen","Hilfestufe 2 von 3: Stilmittel","Hilfestufe 3 von 3: Mustersatz"];
+const levels = {A:0,B:0,C:0};
+let cur = null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+$('#choices').innerHTML = Object.entries(D).map(([k,d])=>`<button class="choice" id="ch${k}" data-k="${k}" aria-pressed="false"><b>${k}</b><span>${esc(d.label)}</span></button>`).join('');
+document.querySelectorAll('.choice').forEach(b=>b.addEventListener('click',()=>{cur=b.dataset.k;render()}));
+$('#more').addEventListener('click',()=>{ if(cur && levels[cur]<3){levels[cur]++;render();} });
+
+function drawPoem(){
+  const lv = cur ? levels[cur] : 0;
+  const marks = {}; // line -> [[text, n]]
+  if(cur && lv>=1) D[cur].sm.forEach((s,i)=>s.marks.forEach(([ln,t])=>{(marks[ln]=marks[ln]||[]).push([t,i+1])}));
+  $('#poem').innerHTML = POEM.map((line,i)=>{
+    let h = esc(line);
+    (marks[i+1]||[]).forEach(([t,n])=>{ h = h.replace(esc(t), `<mark class="on${n}">${esc(t)}</mark>`); });
+    const gap = (i===4||i===8||i===12) ? '<div class="gap"></div>' : '';
+    return `${gap}<div class="l"><span class="n">${(i+1)%5===0?i+1:''}</span><span>${h}</span></div>`;
+  }).join('');
+}
+
+function render(){
+  document.querySelectorAll('.choice').forEach(b=>b.setAttribute('aria-pressed', b.dataset.k===cur));
+  const lv = cur ? levels[cur] : 0;
+  drawPoem();
+  $('#lvl').textContent = LEVEL_TXT[lv];
+  document.querySelectorAll('#dots i').forEach((d,i)=>d.classList.toggle('on', i<lv));
+  const btn = $('#more');
+  btn.disabled = !cur || lv>=3;
+  btn.textContent = ['Ich brauche ein wenig Hilfe','Ich brauche noch etwas mehr Hilfe','Ich hab’s noch gar nicht verstanden – bitte hilf mir!','Alle Hilfen genutzt – jetzt sind Sie dran'][lv];
+  $('#hint').textContent = !cur ? 'Wählen Sie zuerst oben eine Deutung.'
+    : lv===0 ? 'Versuchen Sie es zuerst allein. Tippen Sie auf den Button, wenn Sie nicht weiterkommen.'
+    : lv===1 ? 'Vier Farben, vier Stilmittel. Untersuchen Sie die markierten Stellen und wählen Sie zwei für Ihr Arbeitsblatt aus.'
+    : lv===2 ? 'Wählen Sie zwei Stilmittel und formulieren Sie selbst: Beleg (V.) – Funktion – Bezug zur Deutung.'
+    : 'Nutzen Sie den Mustersatz als Vorbild. Schreiben Sie ihn nicht einfach ab, sondern in eigenen Worten.';
+  if(!cur || lv===0){ $('#cards').innerHTML=''; return; }
+  $('#cards').innerHTML = D[cur].sm.map((s,i)=>`<article class="sm">
+    <div class="hd"><span class="sw sw${i+1}"></span>Stilmittel ${i+1} · ${s.where}</div>
+    ${lv>=2?`<p class="name"><b>${esc(s.name)}</b></p><p>${esc(s.extra)}</p>`:`<p>Hier steckt ein Stilmittel, das Deutung ${cur} stützt.</p>`}
+    ${lv>=3?`<p class="muster">${esc(s.muster)}</p>`:''}
+  </article>`).join('');
+}
+render();
+</script>
+
+</body>
+</html>
